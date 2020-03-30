@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Tween</title>
+  <style>
+    html {
+      font-family: Arial, Helvetica, sans-serif
+    }
+
+    style {
+      font-family: 'Courier New', Courier, monospace;
+      white-space: pre;
+      display: block;
+      border: inset;
+      padding: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    .float-child {
+      width: 250px;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    footer {
+      color: grey;
+    }
+  </style>
+  <script type="module">
+    import smoothAdd from './tween-dom.js';
+
+    function randomEmoji() {
+      const emojiRange = [
+        [128513, 128591],
+        [128640, 128704]
+      ];
+
+      const range = emojiRange[Math.floor(emojiRange.length * Math.random())];
+      const emoji = range[0] + Math.floor(Math.random() * (range[1] - range[0]));
+      return "&#" + emoji + ";";
+    }
+
+    window.insertbefore = function insertbefore(e) {
+
+      // Measure dom
+      const cb = smoothAdd(this.parentNode, document.body);
+
+      // Make  changes
+      const newNode = this.cloneNode(true);
+
+      const emojiEl = newNode.querySelector('.emoji');
+      if (emojiEl) emojiEl.innerHTML = randomEmoji();
+
+      this.parentNode.insertBefore(newNode, this);
+
+      // Animate the changes
+      cb();
+    }
+  </script>
+</head>
+
+<body>
+
+<h1>Layout Tweening Test</h1>
+<p>Below are a selection of different layouts: List, Floats, Flexbox, Grid. With controls for adding elements,
+  try changing the CSS for them to see how it still works.
+</p>
+
+<h2>List Elements</h2>
+<p>A standard 2D list, click on a list element to add another.</p>
+<style contenteditable="">ul {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+li {
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  margin: 0.5em;
+  background: burlywood;
+}</style>
+
+<ul>
+  <li onclick="insertbefore.call(this)"><span class="emoji">🌙</span> Click to insert an item above.</li>
+  <li onclick="insertbefore.call(this)"><span class="emoji">🐻</span> Click to insert an item above.</li>
+</ul>
+
+<h2>Floats</h2>
+<p>Floating elements will try to fill available space.</p>
+
+<style contenteditable="">.float-container {
+  border: 3px solid burlywood;
+}
+
+div.float-container > .float-child {
+  float: left;
+  margin: 0.5em;
+  box-shadow: 5px 5px 0 0 rgba(0,0,0,0.3);
+}
+
+.float-container::after {
+  content: '';
+  display: table;
+  clear: both;
+}</style>
+<div class="float-container">
+  <img onclick="insertbefore.call(this)" class="float-child" src="http://placekitten.com/250/150">
+  <img onclick="insertbefore.call(this)" class="float-child" src="http://placekitten.com/251/151">
+  <img onclick="insertbefore.call(this)" class="float-child" src="http://placekitten.com/252/150">
+  <img onclick="insertbefore.call(this)" class="float-child" src="http://placekitten.com/253/150">
+</div>
+
+<h1>Flexbox</h1>
+<p>Try changing the direction and adding or removing items.</p>
+<style contenteditable="">.flex-container {
+  display: flex;
+  height: 150px;
+}
+
+div.flex-container > .flex-child {
+  flex: 1 0;
+  min-width: 0;
+}</style>
+<div class="flex-container">
+  <img onclick="insertbefore.call(this)" class="flex-child" src="http://placekitten.com/250/150">
+  <img onclick="insertbefore.call(this)" class="flex-child" src="http://placekitten.com/251/150">
+  <img onclick="insertbefore.call(this)" class="flex-child" src="http://placekitten.com/252/150">
+  <img onclick="insertbefore.call(this)" class="flex-child" src="http://placekitten.com/253/150">
+</div>
+
+<h1>Grid</h1>
+<p>A 2D grid, try changing...</p>
+<style contenteditable="">.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+}
+.grid-child {
+  width: 100%;
+}
+</style>
+<div class="grid-container">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="http://placekitten.com/250/150">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="http://placekitten.com/251/150">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="http://placekitten.com/252/150">
+</div>
+
+<footer>
+  <hr>
+  <h3>This is a sample footer</h3>
+  <p>Sample footer text</p>
+</footer>
+</body>
+
+</html>
