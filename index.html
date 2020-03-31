@@ -19,7 +19,7 @@
       margin-bottom: 0.5em;
     }
 
-    .float-child {
+    img {
       width: 250px;
       height: 150px;
       object-fit: cover;
@@ -65,7 +65,9 @@
       const stylesheet = document.getElementById(stylesheetId);
 
       // Measure dom
-      const cb = smoothAdd(tweenEl);
+      const cb = smoothAdd(tweenEl, document.body, {
+        exempt: [tweenEl]
+      });
   
       stylesheet.innerHTML = styleIn.innerHTML.trim();
 
@@ -122,14 +124,18 @@ div.float-container > .float-child {
 }</style>
 <div class="float-container">
   <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/250/150">
-  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/251/151">
+  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/251/150">
   <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/252/150">
   <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/253/150">
 </div>
 
 <h2 id="flex-demo"><a href="#flex-demo">Flexbox</a></h2>
 <p>Try changing the direction and adding or removing items.</p>
-<style contenteditable="">.flex-container {
+<p>
+  <button onclick="setStyle('flex-style','flex1',document.querySelector('.flex-container'));">Flex Row</button>
+  <button onclick="setStyle('flex-style','flex2',document.querySelector('.flex-container'));">Flex Column</button>
+</p>
+<style contenteditable="" id="flex-style">.flex-container {
   display: flex;
   height: 150px;
 }
@@ -137,6 +143,7 @@ div.float-container > .float-child {
 div.flex-container > .flex-child {
   flex: 1 0;
   min-width: 0;
+  min-height: 0;
 }</style>
 <div class="flex-container">
   <img onclick="insertbefore.call(this)" class="flex-child" src="https://placekitten.com/250/150">
@@ -159,6 +166,7 @@ div.flex-container > .flex-child {
 }
 .grid-child {
   width: 100%;
+  height: 100%;
 }
 .grid-child:nth-child(even) {
   grid-column: span 2;
@@ -181,13 +189,36 @@ div.flex-container > .flex-child {
 </footer>
 
 <template id="templates">
-  <style id="grid1">
+<style id="flex1">
+.flex-container {
+  display: flex;
+  height: 150px;
+}
+
+div.flex-container > .flex-child {
+  flex: 1 0;
+  min-width: 0;
+}</style>
+<style id="flex2">
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 600px;
+}
+
+div.flex-container > .flex-child {
+  flex: 1 0;
+  min-height: 0;
+}</style>
+<style id="grid1">
 .grid-container {
   display: grid;
   grid-template-columns: repeat(4,1fr);
 }
 .grid-child {
   width: 100%;
+  height: 100%;
 }
 .grid-child:nth-child(even) {
   grid-column: span 2;
@@ -201,6 +232,7 @@ div.flex-container > .flex-child {
 }
 .grid-child {
   width: 100%;
+  height: 100%;
 }
 .grid-child:nth-child(odd) {
   grid-column: span 2;
@@ -215,6 +247,7 @@ div.flex-container > .flex-child {
 }
 .grid-child {
   width: 100%;
+  height: 100%;
 }
 .grid-child:nth-child(odd) {
   grid-column: span 2;
@@ -229,6 +262,7 @@ div.flex-container > .flex-child {
 }
 .grid-child {
   width: 100%;
+  height: 100%;
 }
 </style>
 </template>
