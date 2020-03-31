@@ -43,10 +43,10 @@
       return "&#" + emoji + ";";
     }
 
-    window.insertbefore = function insertbefore(e) {
+    window.insertbefore = function insertbefore(options) {
 
       // Measure dom
-      const cb = smoothAdd(this.parentNode, document.body);
+      const cb = smoothAdd(this.parentNode, document.body, options);
 
       // Make  changes
       const newNode = this.cloneNode(true);
@@ -55,6 +55,19 @@
       if (emojiEl) emojiEl.innerHTML = randomEmoji();
 
       this.parentNode.insertBefore(newNode, this);
+
+      // Animate the changes
+      cb();
+    }
+
+    window.setStyle = function (stylesheetId, templateId, tweenEl) {
+      const styleIn = templates.content.getElementById(templateId);
+      const stylesheet = document.getElementById(stylesheetId);
+
+      // Measure dom
+      const cb = smoothAdd(tweenEl);
+  
+      stylesheet.innerHTML = styleIn.innerHTML.trim();
 
       // Animate the changes
       cb();
@@ -69,7 +82,7 @@
   try changing the CSS for them to see how it still works.
 </p>
 
-<h2>List Elements</h2>
+<h2 id="list-demo"><a href="#list-demo">List Elements</h2>
 <p>A standard 2D list, click on a list element to add another.</p>
 <style contenteditable="">ul {
   max-width: 500px;
@@ -85,11 +98,11 @@ li {
 }</style>
 
 <ul>
-  <li onclick="insertbefore.call(this)"><span class="emoji">🌙</span> Click to insert an item above.</li>
-  <li onclick="insertbefore.call(this)"><span class="emoji">🐻</span> Click to insert an item above.</li>
+  <li onclick="insertbefore.call(this, {scale: false})"><span class="emoji">🌙</span> Click to insert an item above.</li>
+  <li onclick="insertbefore.call(this, {scale: false})"><span class="emoji">🐻</span> Click to insert an item above.</li>
 </ul>
 
-<h2>Floats</h2>
+<h2 id="floats-demo"><a href="#floats-demo">Floats</h2>
 <p>Floating elements will try to fill available space.</p>
 
 <style contenteditable="">.float-container {
@@ -108,13 +121,13 @@ div.float-container > .float-child {
   clear: both;
 }</style>
 <div class="float-container">
-  <img onclick="insertbefore.call(this)" class="float-child" src="https://placekitten.com/250/150">
-  <img onclick="insertbefore.call(this)" class="float-child" src="https://placekitten.com/251/151">
-  <img onclick="insertbefore.call(this)" class="float-child" src="https://placekitten.com/252/150">
-  <img onclick="insertbefore.call(this)" class="float-child" src="https://placekitten.com/253/150">
+  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/250/150">
+  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/251/151">
+  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/252/150">
+  <img onclick="insertbefore.call(this, {scale: false})" class="float-child" src="https://placekitten.com/253/150">
 </div>
 
-<h1>Flexbox</h1>
+<h2 id="flex-demo"><a href="#flex-demo">Flexbox</a></h2>
 <p>Try changing the direction and adding or removing items.</p>
 <style contenteditable="">.flex-container {
   display: flex;
@@ -132,20 +145,33 @@ div.flex-container > .flex-child {
   <img onclick="insertbefore.call(this)" class="flex-child" src="https://placekitten.com/253/150">
 </div>
 
-<h1>Grid</h1>
-<p>A 2D grid, try changing...</p>
-<style contenteditable="">.grid-container {
+<h2 id="grid-demo"><a href="#grid-demo">Grid</a></h2>
+<p>A 2D grid layout, try some of the alternate grids they tween when you switch.</p>
+<p>
+  <button onclick="setStyle('grid-style','grid1',document.querySelector('.grid-container'));">Grid 1</button>
+  <button onclick="setStyle('grid-style','grid2',document.querySelector('.grid-container'));">Grid 2</button>
+  <button onclick="setStyle('grid-style','grid3',document.querySelector('.grid-container'));">Grid 3</button>
+  <button onclick="setStyle('grid-style','grid4',document.querySelector('.grid-container'));">Grid 4</button>
+</p>
+<style contenteditable="" id="grid-style">.grid-container {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(4,1fr);
 }
 .grid-child {
   width: 100%;
+}
+.grid-child:nth-child(even) {
+  grid-column: span 2;
+  grid-row: span 2;
 }
 </style>
 <div class="grid-container">
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/250/150">
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/251/150">
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/252/150">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/253/150">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/254/150">
+  <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/255/150">
 </div>
 
 <footer>
@@ -153,6 +179,59 @@ div.flex-container > .flex-child {
   <h3>This is a sample footer</h3>
   <p>Sample footer text</p>
 </footer>
+
+<template id="templates">
+  <style id="grid1">
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
+.grid-child {
+  width: 100%;
+}
+.grid-child:nth-child(even) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+</style>
+<style id="grid2">
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+}
+.grid-child {
+  width: 100%;
+}
+.grid-child:nth-child(odd) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+</style>
+<style id="grid3">
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-auto-flow: dense;
+}
+.grid-child {
+  width: 100%;
+}
+.grid-child:nth-child(odd) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+</style>
+<style id="grid4">
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-flow: dense;
+}
+.grid-child {
+  width: 100%;
+}
+</style>
+</template>
 </body>
 
 </html>

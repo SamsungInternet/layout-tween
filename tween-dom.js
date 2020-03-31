@@ -1,6 +1,9 @@
 // When a new child is added smoothly 
 function smoothAdd(...parents) {
-	const options = {};
+	const options = {
+		translate: true,
+		scale:true
+	};
 	if (parents[parents.length - 1] instanceof HTMLElement === false) {
 		Object.assign(options, parents.pop());
 	}
@@ -18,9 +21,14 @@ function smoothAdd(...parents) {
 					const oldPos = oldPositions.get(el);
 					const newPos = newPositions.get(el);
 					let oldTransform = window.getComputedStyle(el).transform;
-					if (oldTransform === 'none') oldTransform = 'scale(1)';
-					el.animate({
-						transform: [`${oldTransform} translate(${oldPos.x - newPos.x}px, ${oldPos.y - newPos.y}px)`, oldTransform]
+					if (oldTransform === 'none') {
+						oldTransform = 'scale(1)';
+					}
+					const translateTransform = `translate(${oldPos.x - newPos.x}px, ${oldPos.y - newPos.y}px)`;
+					const scaleTransform = `scale(${oldPos.width/newPos.width},${oldPos.height/newPos.height})`;
+					const anim = el.animate({
+						transformOrigin: ['0 0','0 0'],
+						transform: [`${oldTransform} ${options.translate ? translateTransform : ''} ${options.scale ? scaleTransform : ''}`, oldTransform],
 					}, {
 						easing: 'ease-out',
 						duration: 500
