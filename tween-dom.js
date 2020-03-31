@@ -1,8 +1,18 @@
-// When a new child is added smoothly 
-function smoothAdd(...parents) {
+/**
+ * This funciton when called on a list of elements will measure the position and size
+ * of all it's children elements and return a function, which when called will animate
+ * from the old size and position to the new one.
+ * 
+ * @param  {...HTMLElement} parents 
+ * @param option
+ */
+function tweenLayoutChanges(...parents) {
+
+	// Option schema & default values
 	const options = {
 		translate: true,
 		scale:true,
+		exemptParents: true,
 		exempt: [],
 		animationOptions: {
 			easing: 'ease-out',
@@ -19,20 +29,36 @@ function smoothAdd(...parents) {
 	const posMap = new Map();
 	for (parent of parents) {
 
-		// Measure the children of each element and store it
-		posMap.set(parent, new Map(Array.from(parent.children).map(el => [el, el.getBoundingClientRect()])));
+		// Turn an array of elements into a map of elements to their respective bounding box
+		const boundingBoxMap = new Map(
+			Array.from(parent.children).map(
+				el => [ el, el.getBoundingClientRect() ]
+			)
+		);
+
+		// This maps each parent to the map of it's childern to their respective
+		// bounding box.
+		posMap.set(parent, boundingBoxMap);
 	}
 
 	// Run this to animate the difference between the old size/position and the new size/position
 	return function () {
 		for (parent of parents) {
 			const children = Array.from(parent.children);
-			const newPositions = new Map(children.map(el => [el, el.getBoundingClientRect()]));
+
+			// get the boundingBoxMap from earlier
 			const oldPositions = posMap.get(parent);
+
+			// Measure the new bounding boxes for each element
+			const newPositions = new Map(children.map(el => [el, el.getBoundingClientRect()]));
+
 			for (const el of children) {
 
 				// Ignore elements which are excluded in the options
-				if (options.exempt.includes(el)) return;
+				if (options.exempt.includes(el)) continue;
+
+				// Ignore elements which are having their children animated already
+				if (options.exemptParents && parents.includes(el)) continue;
 
 				// If the element is not new then animate the transform between old and new
 				if (oldPositions.has(el)) {
@@ -56,7 +82,7 @@ function smoothAdd(...parents) {
 						`scale(${oldPos.width/newPos.width},${oldPos.height/newPos.height})`;
 
 					// Do the animation to move/scale old elements
-					const anim = el.animate({
+					el.animate({
 						transformOrigin: ['0 0','0 0'],
 						transform: [`${oldTransform} ${options.translate ? translateTransform : ''} ${options.scale ? scaleTransform : ''}`, oldTransform],
 					}, options.animationOptions);
@@ -83,4 +109,4 @@ function smoothAdd(...parents) {
 	}
 }
 
-export default smoothAdd;
+export default tweenLayoutChanges;

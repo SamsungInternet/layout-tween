@@ -43,7 +43,7 @@
       return "&#" + emoji + ";";
     }
 
-    window.insertbefore = function insertbefore(options) {
+    window.insertbefore = function insertbefore(options = {}) {
 
       // Measure dom
       const cb = smoothAdd(this.parentNode, document.body, options);
@@ -65,9 +65,7 @@
       const stylesheet = document.getElementById(stylesheetId);
 
       // Measure dom
-      const cb = smoothAdd(tweenEl, document.body, {
-        exempt: [tweenEl]
-      });
+      const cb = smoothAdd(tweenEl, document.body);
   
       stylesheet.innerHTML = styleIn.innerHTML.trim();
 
@@ -163,6 +161,7 @@ div.flex-container > .flex-child {
 <style contenteditable="" id="grid-style">.grid-container {
   display: grid;
   grid-template-columns: repeat(4,1fr);
+  grid-auto-rows: 150px;
 }
 .grid-child {
   width: 100%;
