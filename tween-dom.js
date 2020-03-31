@@ -5,6 +5,17 @@
  * 
  * @param  {...HTMLElement} parents 
  * @param option
+ * 
+ * options:
+ * 
+ *  translate: whether to animate position changes
+ *  scale: whether to animate size changes
+ *  exemptParents: this will ignore elements explicitly passed
+ *                 into this function when they are matched as
+ *                 a child of another element.
+ *  exempt: a list of elements to ignore
+ *  animationOptions: options for the animation, see mdn:
+ *                   https://developer.mozilla.org/en-US/docs/Web/API/Element/animate#Parameters
  */
 function tweenLayoutChanges(...parents) {
 
