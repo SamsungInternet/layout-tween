@@ -12,15 +12,33 @@ https://samsunginter.net/layout-tween/
 
 ## Example
 
-```javascript
+### HTML
+```html
+<ul>
+  <li onClick="callback(this)">Cat</li>
+  <li onClick="callback(this)">Dog</li>
+  <li onClick="callback(this)">Cow</li>
+  <li onClick="callback(this)">Horse</li>
+</ul>
+```
+
+### Javascript
+```Javascript
 import tween from './tween-dom.js';
 
-// Measure the current elements
-const callback = tween(... elements, options);
+function callback(item){
+  const options = {
+    translate: true,      // Animate position change
+    scale: true,          // Animate size change
+    exemptParents: true,  // Will ignore elements explicitly passed when they are matched as a child of another element.
+    exempt: [],           // List of element to exempt 
+    animationOptions: {
+      easing: 'ease-out', // Https://developer.mozilla.org/en-US/docs/Web/API/Element/animate#Parameters
+      duration: 500       // Animation duration
+    }
+  };
+  
+  tween(item.parentNode, document.body, options)
+}
 
-// Make some changes
-
-
-// animate the changes
-callback();
 ```
