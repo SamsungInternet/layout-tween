@@ -15,10 +15,10 @@ https://samsunginter.net/layout-tween/
 ### HTML
 ```html
 <ul>
-  <li onClick="callback(this)">Cat</li>
-  <li onClick="callback(this)">Dog</li>
-  <li onClick="callback(this)">Cow</li>
-  <li onClick="callback(this)">Horse</li>
+  <li onClick="onclick(this)">Cat</li>
+  <li onClick="onclick(this)">Dog</li>
+  <li onClick="onclick(this)">Cow</li>
+  <li onClick="onclick(this)">Horse</li>
 </ul>
 ```
 
@@ -26,7 +26,7 @@ https://samsunginter.net/layout-tween/
 ```Javascript
 import tween from './tween-dom.js';
 
-function callback(item){
+function onclick(item){
   const options = {
     translate: true,      // Animate position change
     scale: true,          // Animate size change
@@ -38,7 +38,11 @@ function callback(item){
     }
   };
   
-  tween(item.parentNode, document.body, options)
+  const animate = tween(item.parentNode, document.body, options)
+  
+  // Make some dom changes e.g. this.remove();
+  
+  animate();
 }
 
 ```
