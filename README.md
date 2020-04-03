@@ -12,7 +12,7 @@ https://samsunginter.net/layout-tween/
 
 ## Example
 
-```
+```javascript
 import tween from './tween-dom.js';
 
 // Measure the current elements
