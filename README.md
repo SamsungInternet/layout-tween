@@ -6,8 +6,11 @@ This is a library to assist in animating changes to the DOM, to use it
 * Do your changes
 * Run the returned callback function to animate the changes
 
-Example
-=======
+## Demo
+
+https://samsunginter.net/layout-tween/
+
+## Example
 
 ```
 import tween from './tween-dom.js';
