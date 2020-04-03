@@ -27,6 +27,8 @@ https://samsunginter.net/layout-tween/
 import tween from './tween-dom.js';
 
 function onclick(item){
+
+  // These are the default options
   const options = {
     translate: true,      // Animate position change
     scale: true,          // Animate size change
@@ -38,7 +40,7 @@ function onclick(item){
     }
   };
   
-  const animate = tween(item.parentNode, document.body, options)
+  const animate = tween(item.parentNode, document.body [, options])
   
   // Make some dom changes e.g. this.remove();
   
