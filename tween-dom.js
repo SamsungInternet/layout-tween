@@ -23,6 +23,7 @@ function tweenLayoutChanges(...parents) {
 	const options = {
 		translate: true,
 		scale:true,
+		clip: false,
 		exemptParents: true,
 		exempt: [],
 		animationOptions: {
@@ -34,6 +35,11 @@ function tweenLayoutChanges(...parents) {
 	// If the last element is not an element then treat it as options.
 	if (parents[parents.length - 1] instanceof HTMLElement === false) {
 		Object.assign(options, parents.pop());
+	}
+
+	// If clipping don't scale
+	if (options.clip) {
+		options.scale = false;
 	}
 
 	// Map of Maps for each element handed to the function
@@ -92,10 +98,14 @@ function tweenLayoutChanges(...parents) {
 						'scale(1)' :
 						`scale(${oldPos.width/newPos.width},${oldPos.height/newPos.height})`;
 
+					const heightDiff = (newPos.height - oldPos.height);
+					const widthDiff = (newPos.width - oldPos.width);
+
 					// Do the animation to move/scale old elements
 					el.animate({
 						transformOrigin: ['0 0','0 0'],
 						transform: [`${oldTransform} ${options.translate ? translateTransform : ''} ${options.scale ? scaleTransform : ''}`, oldTransform],
+						clipPath: [!options.clip ? 'inset(0px 0px 0px 0px)' : `inset(0px ${widthDiff}px ${heightDiff}px 0px)`, 'inset(0px 0px 0px 0px)']
 					}, options.animationOptions);
 
 					// Otherwise it's a new element and needs to be faded in after
@@ -106,7 +116,7 @@ function tweenLayoutChanges(...parents) {
 
 					// Fade in new elements once the old animations have finished
 					Object.assign(fadeAnimationOptions, {
-						delay: fadeAnimationOptions.duration,
+						delay: (fadeAnimationOptions.delay || 0) + fadeAnimationOptions.duration,
 						fill: 'backwards'
 					});
 
