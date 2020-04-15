@@ -18,6 +18,10 @@
  *                   https://developer.mozilla.org/en-US/docs/Web/API/Element/animate#Parameters
  */
 function tweenLayoutChanges(...parents) {
+	
+	// If the user would prefer less animation then don't do anything just return a no-op function.
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (prefersReducedMotion === true) return function () {};
 
 	// Option schema & default values
 	const options = {
