@@ -1,0 +1,19 @@
+{
+  "name": "layout-tween",
+  "version": "1.0.0",
+  "description": "Animate changes made to the DOM",
+  "main": "tween-dom.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samsunginternet/layout-tween.git"
+  },
+  "author": "Ada Rose Cannon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samsunginternet/layout-tween/issues"
+  },
+  "homepage": "https://github.com/samsunginternet/layout-tween#readme"
+}

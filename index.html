@@ -30,7 +30,7 @@
     }
   </style>
   <script type="module">
-    import smoothAdd from './tween-dom.js?cachebuster=1';
+    import tween from './layout-tween.js';
 
     function randomEmoji() {
       const emojiRange = [
@@ -46,7 +46,7 @@
     window.insertbefore = function insertbefore(options = {}) {
 
       // Measure dom
-      const cb = smoothAdd(this.parentNode, document.body, options);
+      const cb = tween(this.parentNode, document.body, options);
 
       // Make  changes
       const newNode = this.cloneNode(true);
@@ -65,7 +65,7 @@
       const stylesheet = document.getElementById(stylesheetId);
 
       // Measure dom
-      const cb = smoothAdd(tweenEl, document.body, {clip: true});
+      const cb = tween(tweenEl, document.body, {clip: true});
   
       stylesheet.innerHTML = styleIn.innerHTML.trim();
 
