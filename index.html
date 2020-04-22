@@ -10,7 +10,7 @@
       font-family: Arial, Helvetica, sans-serif
     }
 
-    style {
+    style[contenteditable] {
       font-family: 'Courier New', Courier, monospace;
       white-space: pre;
       display: block;
@@ -65,7 +65,7 @@
       const stylesheet = document.getElementById(stylesheetId);
 
       // Measure dom
-      const cb = tween(tweenEl, document.body, {clip: true});
+      const cb = tween(tweenEl, document.body);
   
       stylesheet.innerHTML = styleIn.innerHTML.trim();
 
@@ -179,6 +179,86 @@ div.flex-container > .flex-child {
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/253/150">
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/254/150">
   <img onclick="insertbefore.call(this)" class="grid-child" src="https://placekitten.com/255/150">
+</div>
+
+
+<h2>Clip vs Scale on Text</h2>
+<p>Below are two demos, the first resizes by scaling the element the second one uses clipping to hide. Which feels better to you?</p>
+<style>
+.resize-demo {
+  --container-bg: white;
+  --size: 10em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--size), 1fr));
+  gap: 1em;
+  max-width: calc((var(--size) + 1em) * 4 + 1em);
+  position: relative;
+}
+
+.resize-demo > .item {
+  --bg: palegoldenrod;
+  background-color: var(--bg);
+  height: var(--size);
+  line-height: 1em;
+  overflow: hidden;
+  position: relative;
+  padding: 0.5em;
+}
+
+.resize-demo > .item > button {
+  position: absolute;
+  bottom: 0.5em;
+  left: 0.5em;
+  right: 0.5em;
+  z-index: 2;
+}
+
+.resize-demo > .item.big {
+  position: absolute;
+  bottom: 0.5em;
+  left: 0.5em;
+  right: 0.5em;
+  top: 0.5em;
+  z-index: 4;
+  border: 2px solid green;
+  box-shadow: 0 0 1em darkslategray;
+  padding-bottom: 4em;
+}
+
+.resize-demo > .item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2em;
+  background: linear-gradient(transparent, var(--bg));
+  z-index: 1;
+}
+</style>
+
+<script type="module">
+  import tween from './layout-tween.js';
+  function revealScale(el, options={}) {
+    const animateFn = tween(el.parentNode, options);
+    for (const el2 of el.parentNode.children) el2.classList.toggle('big', el === el2 && !el2.classList.contains('big'));
+    animateFn();
+  }
+  window.revealScale = revealScale;
+</script>
+<h3>Scale</h3>
+<div class="resize-demo">
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode)">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode)">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode)">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode)">Expand</button></div>
+</div>
+<h3>Clip</h3>
+<div class="resize-demo">
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode, {clip: true})">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode, {clip: true})">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode, {clip: true})">Expand</button></div>
+  <div class="item"><span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span><button onclick="revealScale(this.parentNode, {clip: true})">Expand</button></div>
 </div>
 
 <footer>
